@@ -25,70 +25,61 @@ namespace SETBTankManager.Client
         private float AdjSensitivity = Sensitivity;
         private Vector3D _aimDir = Vector3D.Zero;
         private Vector3D _relativeAimpoint = Vector3D.Zero;
+        private bool _hasGridControl = false;
+        private MyBillboard Crosshair = null;
         
-        public override void Draw()
+        public override void UpdateBeforeSimulation()
         {
             try
             {
                 if (MyAPIGateway.Session?.Player == null || MyAPIGateway.Input == null)
                     return;
-                var cockpit = MyAPIGateway.Session.Player?.Controller?.ControlledEntity as IMyCockpit;
+                var cockpit = MyAPIGateway.Session.Player?.Controller?.ControlledEntity as IMyShipController;
                 if (cockpit == null)
                 {
-                    MyAPIGateway.Utilities.ShowNotification($"[SETBTM] No cockpit.", 1000 / 60);
+                    _aimDir = Vector3D.Zero;
+                    _relativeAimpoint = Vector3D.Zero;
                     return;
                 }
-                var grid = cockpit.CubeGrid;
         
                 if (MyAPIGateway.Session.GameplayFrameCounter % 10 == 0)
                 {
                     AdjSensitivity = Sensitivity * MyAPIGateway.Input.GetMouseSensitivity();
-                }
-        
-                // update aimpoint
-                if (MyAPIGateway.Input.IsKeyPress(MyKeys.C))
-                {
-                    _aimDir = Vector3D.Zero;
-                }
-                if (!(MyAPIGateway.Input.IsKeyPress(MyKeys.Alt) || MyAPIGateway.Gui.IsCursorVisible || MyAPIGateway.Gui.ChatEntryVisible))
-                {
-                    _aimDir = GetLookDir(_aimDir);
+                    _hasGridControl = CanControlTurret(cockpit);
                 }
 
+                if (!_hasGridControl)
+                    return;
+        
+                // update aimpoint
+                if (!(MyAPIGateway.Gui.IsCursorVisible || MyAPIGateway.Gui.ChatEntryVisible || MyAPIGateway.Session.IsCameraUserControlledSpectator))
+                {
+                    if (MyAPIGateway.Input.IsKeyPress(MyKeys.C))
+                    {
+                        _aimDir = Vector3D.Zero;
+                    }
+                    else if (!MyAPIGateway.Input.IsKeyPress(MyKeys.Alt))
+                    {
+                        _aimDir = GetLookDir(_aimDir);
+                    }
+                }
+
+                var grid = cockpit.CubeGrid;
+                string cData;
                 if (_aimDir == Vector3D.Zero)
                 {
                     _relativeAimpoint = Vector3D.Zero;
+                    cData = "RESET";
                 }
                 else
                 {
                     _relativeAimpoint = GetLookPos(grid, _aimDir) - grid.GetPosition();
+                    cData = _relativeAimpoint.ToString();
                 }
         
-                string cData = _relativeAimpoint.ToString();
                 foreach (var pb in grid.GetFatBlocks<IMyProgrammableBlock>())
                 {
                     pb.Run(cData);
-                }
-        
-                // draw indicator
-                if (_relativeAimpoint != Vector3D.Zero)
-                {
-                    //Vector3D drawPoint = _relativeAimpoint + grid.GetPosition();
-                    const float camDist = 0.01f;
-                    Vector3D drawPoint = _aimDir * camDist + MyAPIGateway.Session.Camera.WorldMatrix.Translation;
-                    float depthScale = camDist; // move to 0.01m in front of camera
-                    depthScale *= (float)(2 * Math.Tan(Deg2Rad * MyAPIGateway.Session.Camera.FieldOfViewAngle / 2.0)) * camDist; // scale by FoV
-        
-                    MatrixD camMatrix = MyAPIGateway.Session.Camera.WorldMatrix;
-                    MyTransparentGeometry.AddBillboardOriented( // TODO cache billboard
-                        CrosshairTexture,
-                        Color.White * 0.75f,
-                        drawPoint,
-                        camMatrix.Left,
-                        camMatrix.Up,
-                        CrosshairSize * depthScale,
-                        MyBillboard.BlendTypeEnum.LDR
-                        );
                 }
             }
             catch (Exception ex)
@@ -96,7 +87,50 @@ namespace SETBTankManager.Client
                 MyLog.Default.Error(ex.ToString());
             }
         }
-        
+
+        public override void Draw()
+        {
+            // draw indicator
+            if (_relativeAimpoint != Vector3D.Zero)
+            {
+                //Vector3D drawPoint = _relativeAimpoint + grid.GetPosition();
+                const float camDist = 0.01f;
+                Vector3D drawPoint = _aimDir * camDist + MyAPIGateway.Session.Camera.WorldMatrix.Translation;
+                float depthScale = camDist; // move to 0.01m in front of camera
+                depthScale *= (float)(2 * Math.Tan(Deg2Rad * MyAPIGateway.Session.Camera.FieldOfViewAngle / 2.0)) * camDist; // scale by FoV
+            
+                MatrixD camMatrix = MyAPIGateway.Session.Camera.WorldMatrix;
+                MyTransparentGeometry.AddBillboardOriented( // TODO cache billboard
+                    CrosshairTexture,
+                    Color.White * 0.75f,
+                    drawPoint,
+                    camMatrix.Left,
+                    camMatrix.Up,
+                    CrosshairSize * depthScale,
+                    MyBillboard.BlendTypeEnum.LDR
+                );
+            }
+        }
+
+        private bool CanControlTurret(IMyShipController cockpit)
+        {
+            if (!cockpit.IsMainCockpit)
+            {
+                return true;
+            }
+
+            // multicrew support
+            foreach (var controller in cockpit.CubeGrid.GetFatBlocks<IMyShipController>())
+            {
+                if (controller == cockpit)
+                    continue;
+                if (controller.Pilot != null)
+                    return false;
+            }
+
+            return MyAPIGateway.Input.IsKeyPress(MyKeys.RightButton);
+        }
+
         private Vector3D GetLookDir(Vector3D prev)
         {
             if (prev == Vector3D.Zero)
@@ -115,24 +149,24 @@ namespace SETBTankManager.Client
                 return Vector3D.Zero;
         
             var camMatrix = MyAPIGateway.Session.Camera.WorldMatrix;
-            var hits = new List<IHitInfo>();
-            MyAPIGateway.Physics.CastRay(camMatrix.Translation + aimDirection, camMatrix.Translation + aimDirection * CastRange, hits);
-            foreach (var hit in hits)
-            {
-                var ent = hit.HitEntity;
-        
-                if (ent?.Physics == null || ent is IMyCharacter)
-                    continue;
-        
-                if (ent is IMyCubeGrid)
-                {
-                    IMyCubeGrid g = (IMyCubeGrid) ent;
-                    if (g.IsInSameLogicalGroupAs(rootToIgnore))
-                        continue;
-                }
-        
-                return hit.Position;
-            }
+            //var hits = new List<IHitInfo>();
+            //MyAPIGateway.Physics.CastRay(camMatrix.Translation + aimDirection, camMatrix.Translation + aimDirection * CastRange, hits);
+            //foreach (var hit in hits)
+            //{
+            //    var ent = hit.HitEntity;
+            //
+            //    if (ent?.Physics == null || ent is IMyCharacter)
+            //        continue;
+            //
+            //    if (ent is IMyCubeGrid)
+            //    {
+            //        IMyCubeGrid g = (IMyCubeGrid) ent;
+            //        if (g.IsInSameLogicalGroupAs(rootToIgnore))
+            //            continue;
+            //    }
+            //
+            //    return hit.Position;
+            //}
         
             return camMatrix.Translation + aimDirection * CastRange;
         }
