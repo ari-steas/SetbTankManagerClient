@@ -1,0 +1,132 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|c:\\users\\jnick\\source\\repos\\setbtankmanger_clientmod\\turretmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|solutionrelative:turretmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|c:\\users\\jnick\\source\\repos\\setbtankmanger_clientmod\\ammodisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|solutionrelative:ammodisplay.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A3CDCC5-4B55-4D87-A415-698A0E1FF06F}|..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\AriUtils.shproj|c:\\users\\jnick\\onedrive\\documents\\github\\skytecheventrepo\\utility mods\\ariutils\\components\\singletonbase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A3CDCC5-4B55-4D87-A415-698A0E1FF06F}|..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\AriUtils.shproj|c:\\users\\jnick\\onedrive\\documents\\github\\skytecheventrepo\\utility mods\\ariutils\\components\\servermain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|c:\\users\\jnick\\source\\repos\\setbtankmanger_clientmod\\clientmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|solutionrelative:clientmain.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|c:\\users\\jnick\\source\\repos\\setbtankmanger_clientmod\\globaldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{91DE8BD8-7375-CE10-AB3F-F179AC182FE9}|SetbTankManager_ClientMod.csproj|solutionrelative:globaldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 7,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SingletonBase.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\SingletonBase.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\SingletonBase.cs",
+              "ToolTip": "C:\\Users\\jnick\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\SingletonBase.cs",
+              "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\SingletonBase.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAAwEQAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T16:51:41.773Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ServerMain.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\ServerMain.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\ServerMain.cs",
+              "ToolTip": "C:\\Users\\jnick\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\ServerMain.cs",
+              "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\ServerMain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T16:51:17.265Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ClientMain.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\ClientMain.cs",
+              "RelativeDocumentMoniker": "ClientMain.cs",
+              "ToolTip": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\ClientMain.cs",
+              "RelativeToolTip": "ClientMain.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T16:48:34.942Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AmmoDisplay.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\AmmoDisplay.cs",
+              "RelativeDocumentMoniker": "AmmoDisplay.cs",
+              "ToolTip": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\AmmoDisplay.cs",
+              "RelativeToolTip": "AmmoDisplay.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T16:47:35.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TurretManager.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\TurretManager.cs",
+              "RelativeDocumentMoniker": "TurretManager.cs",
+              "ToolTip": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\TurretManager.cs",
+              "RelativeToolTip": "TurretManager.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAACIAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-10T16:47:23.004Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GlobalData.cs",
+              "DocumentMoniker": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\GlobalData.cs",
+              "RelativeDocumentMoniker": "GlobalData.cs",
+              "ToolTip": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\GlobalData.cs",
+              "RelativeToolTip": "GlobalData.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-10-09T19:16:44.91Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

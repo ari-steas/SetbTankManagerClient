@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AriUtils;
+using AriUtils.Components;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.Components;
@@ -12,10 +14,10 @@ using VRage.Utils;
 using VRageMath;
 using VRageRender;
 
-namespace SETBTankManager.Client
+namespace SetbTankManager.Client
 {
     [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
-    public class ClientMain : MySessionComponentBase
+    public class TurretManager : SingletonBase<TurretManager>
     {
         private const float Sensitivity = 0.25f;
         private const float CrosshairSize = 2f;
@@ -26,65 +28,62 @@ namespace SETBTankManager.Client
         private Vector3D _aimDir = Vector3D.Zero;
         private Vector3D _relativeAimpoint = Vector3D.Zero;
         private bool _hasGridControl = false;
-        private MyBillboard Crosshair = null;
-        
-        public override void UpdateBeforeSimulation()
+
+        public override void Init()
         {
-            try
+            // do nothing
+        }
+
+        public override void Update()
+        {
+            if (MyAPIGateway.Session?.Player == null || MyAPIGateway.Input == null)
+                return;
+            var cockpit = MyAPIGateway.Session.Player?.Controller?.ControlledEntity as IMyShipController;
+            if (cockpit == null)
             {
-                if (MyAPIGateway.Session?.Player == null || MyAPIGateway.Input == null)
-                    return;
-                var cockpit = MyAPIGateway.Session.Player?.Controller?.ControlledEntity as IMyShipController;
-                if (cockpit == null)
+                _aimDir = Vector3D.Zero;
+                _relativeAimpoint = Vector3D.Zero;
+                return;
+            }
+        
+            if (MyAPIGateway.Session.GameplayFrameCounter % 10 == 0)
+            {
+                AdjSensitivity = Sensitivity * MyAPIGateway.Input.GetMouseSensitivity();
+                _hasGridControl = CanControlTurret(cockpit);
+            }
+
+            if (!_hasGridControl)
+                return;
+        
+            // update aimpoint
+            if (!(MyAPIGateway.Gui.IsCursorVisible || MyAPIGateway.Gui.ChatEntryVisible || MyAPIGateway.Session.IsCameraUserControlledSpectator))
+            {
+                if (MyAPIGateway.Input.IsKeyPress(MyKeys.C))
                 {
                     _aimDir = Vector3D.Zero;
-                    _relativeAimpoint = Vector3D.Zero;
-                    return;
                 }
-        
-                if (MyAPIGateway.Session.GameplayFrameCounter % 10 == 0)
+                else if (!MyAPIGateway.Input.IsKeyPress(MyKeys.Alt))
                 {
-                    AdjSensitivity = Sensitivity * MyAPIGateway.Input.GetMouseSensitivity();
-                    _hasGridControl = CanControlTurret(cockpit);
-                }
-
-                if (!_hasGridControl)
-                    return;
-        
-                // update aimpoint
-                if (!(MyAPIGateway.Gui.IsCursorVisible || MyAPIGateway.Gui.ChatEntryVisible || MyAPIGateway.Session.IsCameraUserControlledSpectator))
-                {
-                    if (MyAPIGateway.Input.IsKeyPress(MyKeys.C))
-                    {
-                        _aimDir = Vector3D.Zero;
-                    }
-                    else if (!MyAPIGateway.Input.IsKeyPress(MyKeys.Alt))
-                    {
-                        _aimDir = GetLookDir(_aimDir);
-                    }
-                }
-
-                var grid = cockpit.CubeGrid;
-                string cData;
-                if (_aimDir == Vector3D.Zero)
-                {
-                    _relativeAimpoint = Vector3D.Zero;
-                    cData = "RESET";
-                }
-                else
-                {
-                    _relativeAimpoint = GetLookPos(grid, _aimDir) - grid.GetPosition();
-                    cData = _relativeAimpoint.ToString();
-                }
-        
-                foreach (var pb in grid.GetFatBlocks<IMyProgrammableBlock>())
-                {
-                    pb.Run(cData);
+                    _aimDir = GetLookDir(_aimDir);
                 }
             }
-            catch (Exception ex)
+
+            var grid = cockpit.CubeGrid;
+            string cData;
+            if (_aimDir == Vector3D.Zero)
             {
-                MyLog.Default.Error(ex.ToString());
+                _relativeAimpoint = Vector3D.Zero;
+                cData = "RESET";
+            }
+            else
+            {
+                _relativeAimpoint = GetLookPos(grid, _aimDir) - grid.GetPosition();
+                cData = _relativeAimpoint.ToString();
+            }
+        
+            foreach (var pb in grid.GetFatBlocks<IMyProgrammableBlock>())
+            {
+                pb.Run(cData);
             }
         }
 
