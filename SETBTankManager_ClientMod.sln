@@ -9,6 +9,8 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "RichHudFramework", "..\..\.
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "AriUtils", "..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\AriUtils\AriUtils.shproj", "{8A3CDCC5-4B55-4D87-A415-698A0E1FF06F}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "WcApi", "..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\WcApi\WcApi.shproj", "{B602B4B0-669D-4136-905F-58E280128C6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,5 +33,7 @@ Global
 		..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\AriUtils\AriUtils.projitems*{8a3cdcc5-4b55-4d87-a415-698a0e1ff06f}*SharedItemsImports = 13
 		..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\AriUtils\AriUtils.projitems*{91de8bd8-7375-ce10-ab3f-f179ac182fe9}*SharedItemsImports = 5
 		..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\RichHudFramework\RichHudFramework.projitems*{91de8bd8-7375-ce10-ab3f-f179ac182fe9}*SharedItemsImports = 5
+		..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\WcApi\WcApi.projitems*{91de8bd8-7375-ce10-ab3f-f179ac182fe9}*SharedItemsImports = 5
+		..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\WcApi\WcApi.projitems*{b602b4b0-669d-4136-905f-58e280128c6c}*SharedItemsImports = 13
 	EndGlobalSection
 EndGlobal

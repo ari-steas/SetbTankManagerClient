@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using VRage.Game.ModAPI;
+using VRageMath;
 
 namespace AriUtils
 {
@@ -9,9 +10,12 @@ namespace AriUtils
     {
         public const string FriendlyModName = "SETBTankManager";
         public static readonly string LastBuildTime = "$MDK_DATETIME$";
-        public const ushort ServerNetworkId = 15189;
-        public const ushort DataNetworkId = 15188;
-        public const ushort ClientNetworkId = 15187;
+        public const ushort ServerNetworkId = 0;
+        public const ushort DataNetworkId = 0;
+        public const ushort ClientNetworkId = 0;
+
+        public static readonly Color HudBackgroundColor = new Color(255, 255, 255, 40);
+        public static readonly Color NoAmmoColor = new Color(255, 0, 0, 120);
 
         public ObjectPool<List<IMyCubeGrid>> GridListPool = new ObjectPool<List<IMyCubeGrid>>(factory: () => new List<IMyCubeGrid>(), cleanObj: list => list.Clear());
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SetbTankManager.Client;
+using SetbTankManager.Client.AmmoDisplay;
 
 namespace AriUtils.Components
 {

@@ -19,6 +19,24 @@ namespace SetbTankManager.Client
     [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
     public class TurretManager : SingletonBase<TurretManager>
     {
+        public event Action<IMyCubeGrid> OnPlayerChangeGrid;
+
+        private IMyCubeGrid _playerGrid = null;
+        public IMyCubeGrid PlayerGrid
+        {
+            get
+            {
+                return _playerGrid;
+            }
+            private set
+            {
+                if (_playerGrid == value)
+                    return;
+                _playerGrid = value;
+                OnPlayerChangeGrid?.Invoke(_playerGrid);
+            }
+        }
+
         private const float Sensitivity = 0.25f;
         private const float CrosshairSize = 2f;
         private MyStringId CrosshairTexture = MyStringId.GetOrCompute("RoundedSquare");
@@ -41,10 +59,12 @@ namespace SetbTankManager.Client
             var cockpit = MyAPIGateway.Session.Player?.Controller?.ControlledEntity as IMyShipController;
             if (cockpit == null)
             {
+                PlayerGrid = null;
                 _aimDir = Vector3D.Zero;
                 _relativeAimpoint = Vector3D.Zero;
                 return;
             }
+            PlayerGrid = cockpit.CubeGrid;
         
             if (MyAPIGateway.Session.GameplayFrameCounter % 10 == 0)
             {
@@ -68,7 +88,6 @@ namespace SetbTankManager.Client
                 }
             }
 
-            var grid = cockpit.CubeGrid;
             string cData;
             if (_aimDir == Vector3D.Zero)
             {
@@ -77,11 +96,11 @@ namespace SetbTankManager.Client
             }
             else
             {
-                _relativeAimpoint = GetLookPos(grid, _aimDir) - grid.GetPosition();
+                _relativeAimpoint = GetLookPos(PlayerGrid, _aimDir) - PlayerGrid.GetPosition();
                 cData = _relativeAimpoint.ToString();
             }
         
-            foreach (var pb in grid.GetFatBlocks<IMyProgrammableBlock>())
+            foreach (var pb in PlayerGrid.GetFatBlocks<IMyProgrammableBlock>())
             {
                 pb.Run(cData);
             }
