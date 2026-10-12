@@ -32,7 +32,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Bookmark",
@@ -47,6 +47,10 @@
               "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "SingletonBase.cs",
@@ -56,8 +60,7 @@
               "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\SingletonBase.cs",
               "ViewState": "AgIAABEAAAAAAAAAAAAAwEQAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-10T16:51:41.773Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-10T16:51:41.773Z"
             },
             {
               "$type": "Document",
@@ -69,8 +72,7 @@
               "RelativeToolTip": "..\\..\\..\\OneDrive\\Documents\\GitHub\\SkytechEventRepo\\Utility Mods\\AriUtils\\Components\\ServerMain.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-10T16:51:17.265Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-10T16:51:17.265Z"
             },
             {
               "$type": "Document",
@@ -82,8 +84,7 @@
               "RelativeToolTip": "ClientMain.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-10T16:48:34.942Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-10T16:48:34.942Z"
             },
             {
               "$type": "Document",
@@ -95,8 +96,7 @@
               "RelativeToolTip": "AmmoDisplay.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-10T16:47:35.03Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-10T16:47:35.03Z"
             },
             {
               "$type": "Document",
@@ -106,7 +106,7 @@
               "RelativeDocumentMoniker": "TurretManager.cs",
               "ToolTip": "C:\\Users\\jnick\\source\\repos\\SETBTankManger_ClientMod\\TurretManager.cs",
               "RelativeToolTip": "TurretManager.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAACEAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAACEAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-10-10T16:47:23.004Z",
               "EditorCaption": ""
@@ -121,8 +121,7 @@
               "RelativeToolTip": "GlobalData.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-10-09T19:16:44.91Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-10-09T19:16:44.91Z"
             }
           ]
         }
