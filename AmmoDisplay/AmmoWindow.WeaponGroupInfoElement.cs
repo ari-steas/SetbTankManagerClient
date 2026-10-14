@@ -68,7 +68,7 @@ namespace SetbTankManager.Client.AmmoDisplay
 
                 if (Chain.Count > weaponSet.Count)
                 {
-                    Chain.RemoveRange(Chain.Count - (Chain.Count - weaponSet.Count), Chain.Count - 1);
+                    Chain.RemoveRange(Chain.Count - (Chain.Count - weaponSet.Count), Chain.Count - weaponSet.Count);
                 }
                 while (Chain.Count < weaponSet.Count)
                 {

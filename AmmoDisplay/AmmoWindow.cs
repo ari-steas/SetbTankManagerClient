@@ -112,11 +112,29 @@ namespace SetbTankManager.Client.AmmoDisplay
                 return;
             }
 
+            foreach (var type in _weapons)
+            {
+                foreach (var weapon in type.Value)
+                {
+                    if (weapon.Closed)
+                    {
+                        _awaitSetGrid = true;
+                        break;
+                    }
+                }
+
+                if (_awaitSetGrid)
+                    break;
+            }
+
+            if (_awaitSetGrid)
+                return;
+
             GetItemCount(ref _itemCount);
 
             if (_weaponsBox.Count > _weapons.Count)
             {
-                _weaponsBox.RemoveRange(_weaponsBox.Count - (_weaponsBox.Count - _weapons.Count), _weaponsBox.Count - 1);
+                _weaponsBox.RemoveRange(_weaponsBox.Count - (_weaponsBox.Count - _weapons.Count), _weaponsBox.Count - _weapons.Count);
             }
 
             while (_weaponsBox.Count < _weapons.Count)

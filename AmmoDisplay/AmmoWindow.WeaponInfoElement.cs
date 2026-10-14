@@ -39,7 +39,7 @@ namespace SetbTankManager.Client.AmmoDisplay
                     _lastWeapon = weapon;
                     if (Chain.Count > ammoIds.Length)
                     {
-                        Chain.RemoveRange(Chain.Count - (Chain.Count - ammoIds.Length), Chain.Count - 1);
+                        Chain.RemoveRange(Chain.Count - (Chain.Count - ammoIds.Length), Chain.Count - ammoIds.Length);
                     }
                     while (Chain.Count < ammoIds.Length)
                     {
