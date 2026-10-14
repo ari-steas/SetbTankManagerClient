@@ -1,5 +1,4 @@
-﻿using System;
-using AriUtils;
+﻿using AriUtils;
 using CoreSystems.Api;
 using RichHudFramework;
 using RichHudFramework.UI.Client;
@@ -9,8 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using VRage;
 using VRage.Game;
-using VRage.ObjectBuilders;
-using VRageMath;
 
 namespace SetbTankManager.Client.AmmoDisplay
 {
