@@ -19,6 +19,6 @@ namespace AriUtils
 
         public ObjectPool<List<IMyCubeGrid>> GridListPool = new ObjectPool<List<IMyCubeGrid>>(factory: () => new List<IMyCubeGrid>(), cleanObj: list => list.Clear());
 
-        private static Func<string, bool> KillswitchCheck => modIdFormatted => modIdFormatted.Contains("skytech") && modIdFormatted.Contains("engines");
+        private static Func<string, bool> KillswitchCheck => modIdFormatted => modIdFormatted.Contains("setbtankmanager");
     }
 }

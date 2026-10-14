@@ -1,4 +1,5 @@
-﻿using AriUtils;
+﻿using System;
+using AriUtils;
 using CoreSystems.Api;
 using RichHudFramework;
 using RichHudFramework.UI.Client;
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using VRage;
 using VRage.Game;
+using VRage.ObjectBuilders;
+using VRageMath;
 
 namespace SetbTankManager.Client.AmmoDisplay
 {
@@ -15,9 +18,9 @@ namespace SetbTankManager.Client.AmmoDisplay
     {
         private AmmoWindow _window = null;
         /// <summary>
-        /// subtype, displaynametext
+        /// subtype, definition
         /// </summary>
-        public readonly Dictionary<string, string> AmmoDefDisplayNames = new Dictionary<string, string>();
+        public readonly Dictionary<string, MyAmmoMagazineDefinition> AmmoDefs = new Dictionary<string, MyAmmoMagazineDefinition>();
         /// <summary>
         /// Weapon subtype, ammo subtypes
         /// </summary>
@@ -64,7 +67,7 @@ namespace SetbTankManager.Client.AmmoDisplay
                 if (ammoDef == null)
                     continue;
 
-                AmmoDefDisplayNames[ammoDef.Id.SubtypeName] = ammoDef.DisplayNameText;
+                AmmoDefs[ammoDef.Id.SubtypeName] = ammoDef;
                 //Log.Info("AmmoDisplay", $"Found ammo \"{ammoDef.Id.SubtypeName}\" -> \"{ammoDef.DisplayNameText}\"");
             }
             Log.Info("AmmoDisplay", $"Finished polling ammo magazine names.");
