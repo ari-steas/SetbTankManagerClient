@@ -63,6 +63,11 @@ namespace SetbTankManager.Client.AmmoDisplay
 
         public void Update()
         {
+            Visible = GlobalData.HudVisible != GlobalData.HudState.Hidden;
+
+            if (!Visible)
+                return;
+
             if (_awaitSetGrid)
             {
                 if (WcApi != null && WcApi.IsReady)

@@ -37,15 +37,17 @@ namespace SetbTankManager.Client
             }
         }
 
-        private const float Sensitivity = 0.25f;
+        private float Sensitivity = 0.25f;
         private const float CrosshairSize = 2f;
         private MyStringId CrosshairTexture = MyStringId.GetOrCompute("RoundedSquare");
+        private Color _crosshairColor = Color.White * 0.75f;
         private const float Deg2Rad = (float)Math.PI / 180f;
         private const double CastRange = 10000;
-        private float AdjSensitivity = Sensitivity;
+        private float AdjSensitivity = 1;
         private Vector3D _aimDir = Vector3D.Zero;
         private Vector3D _relativeAimpoint = Vector3D.Zero;
         private bool _hasGridControl = false;
+        private List<IMyProgrammableBlock> _gridPbs = new List<IMyProgrammableBlock>();
 
         public override void Init()
         {
@@ -62,6 +64,7 @@ namespace SetbTankManager.Client
                 PlayerGrid = null;
                 _aimDir = Vector3D.Zero;
                 _relativeAimpoint = Vector3D.Zero;
+                _gridPbs.Clear();
                 return;
             }
             PlayerGrid = cockpit.CubeGrid;
@@ -70,9 +73,21 @@ namespace SetbTankManager.Client
             {
                 AdjSensitivity = Sensitivity * MyAPIGateway.Input.GetMouseSensitivity();
                 _hasGridControl = CanControlTurret(cockpit);
+
+                _gridPbs.Clear();
+
+                if (_hasGridControl)
+                {
+                    foreach (var pb in PlayerGrid.GetFatBlocks<IMyProgrammableBlock>())
+                    {
+                        if (!pb.CustomName.EndsWith("[SETBTankManager]"))
+                            continue;
+                        _gridPbs.Add(pb);
+                    }
+                }
             }
 
-            if (!_hasGridControl)
+            if (!_hasGridControl || _gridPbs.Count == 0)
                 return;
         
             // update aimpoint
@@ -100,12 +115,14 @@ namespace SetbTankManager.Client
                 cData = _relativeAimpoint.ToString();
             }
         
-            foreach (var pb in PlayerGrid.GetFatBlocks<IMyProgrammableBlock>())
+            foreach (var pb in _gridPbs)
             {
+                if (pb.Closed || !pb.IsWorking)
+                    continue;
                 pb.Run(cData);
             }
-        }
-
+        } 
+        
         public override void Draw()
         {
             // draw indicator
@@ -120,7 +137,7 @@ namespace SetbTankManager.Client
                 MatrixD camMatrix = MyAPIGateway.Session.Camera.WorldMatrix;
                 MyTransparentGeometry.AddBillboardOriented( // TODO cache billboard
                     CrosshairTexture,
-                    Color.White * 0.75f,
+                    _crosshairColor,
                     drawPoint,
                     camMatrix.Left,
                     camMatrix.Up,
@@ -154,8 +171,8 @@ namespace SetbTankManager.Client
             if (prev == Vector3D.Zero)
                 return MyAPIGateway.Session.Camera.WorldMatrix.Forward;
             MatrixD camMatrix = MyAPIGateway.Session.Camera.WorldMatrix.GetOrientation();
-        
-            Vector2 rot = MyAPIGateway.Input.GetRotation() * AdjSensitivity * (MyAPIGateway.Session.Camera.FieldOfViewAngle/90f) / 60f;
+
+            Vector2 rot = MyAPIGateway.Input.GetRotation() * ((MyAPIGateway.Session.Camera.FieldOfViewAngle / 90f) * AdjSensitivity / 60f);
             MatrixD rotMat = MatrixD.CreateFromYawPitchRoll(-rot.Y, -rot.X, 0) * camMatrix;
             MatrixD invCamMatrix = MatrixD.Invert(camMatrix);
             return Vector3D.Rotate(Vector3D.Rotate(prev, invCamMatrix), rotMat);
@@ -195,6 +212,16 @@ namespace SetbTankManager.Client
             position = camMatrix.Translation + (position - camMatrix.Translation) * 0.01f;
         
             return 0.01f;
+        }
+
+        public void UpdateColor(Color color)
+        {
+            _crosshairColor = color;
+        }
+
+        public void UpdateSensitivity(float sens)
+        {
+            Sensitivity = sens;
         }
     }
 }

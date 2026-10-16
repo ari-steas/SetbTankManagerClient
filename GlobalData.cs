@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using SetbTankManager.Client;
 using VRage.Game.ModAPI;
 using VRageMath;
 
@@ -20,5 +21,25 @@ namespace AriUtils
         public ObjectPool<List<IMyCubeGrid>> GridListPool = new ObjectPool<List<IMyCubeGrid>>(factory: () => new List<IMyCubeGrid>(), cleanObj: list => list.Clear());
 
         private static Func<string, bool> KillswitchCheck => modIdFormatted => modIdFormatted.Contains("setbtankmanager");
+
+        #region Client Config
+
+        //private IniConfig.IniSetting<float> _aimSensitivity = new IniConfig.IniSetting<float>(
+        //    _clientConfig,
+        //    "AimSensitivity",
+        //    "Aim sensitivity multiplier.",
+        //    0.25f,
+        //    TurretManager.I.UpdateSensitivity
+        //);
+
+        private IniConfig.IniSetting<Color> _crosshairColor = new IniConfig.IniSetting<Color>(
+            _clientConfig,
+            "CrosshairColor",
+            "Ingame crosshair color.",
+            Color.White * 0.75f,
+            TurretManager.I.UpdateColor
+            );
+
+        #endregion
     }
 }
