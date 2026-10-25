@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SetbTankManager.Client;
-using SetbTankManager.Client.AmmoDisplay;
+﻿using SetbTankManager.Client.AmmoDisplay;
+using SetbTankManager.Client.TurretManager;
 
 namespace AriUtils.Components
 {

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AriUtils;
-using AriUtils.Components;
 using Sandbox.ModAPI;
 using VRage.Game;
 using VRage.Game.Components;
@@ -14,11 +10,14 @@ using VRage.Utils;
 using VRageMath;
 using VRageRender;
 
-namespace SetbTankManager.Client
+namespace SetbTankManager.Client.TurretManager
 {
     [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
     public class TurretManager : SingletonBase<TurretManager>
     {
+        public const MyKeys AimKey = MyKeys.ExtraButton1;
+        public const MyKeys ResetKey = MyKeys.C;
+        public const MyKeys FreeLookKey = MyKeys.Alt;
         public event Action<IMyCubeGrid> OnPlayerChangeGrid;
 
         private IMyCubeGrid _playerGrid = null;
@@ -49,7 +48,7 @@ namespace SetbTankManager.Client
         private bool _hasGridControl = false;
         private List<IMyProgrammableBlock> _gridPbs = new List<IMyProgrammableBlock>();
 
-        public override void Init()
+        public override void Init(object[] args)
         {
             // do nothing
         }
@@ -93,11 +92,11 @@ namespace SetbTankManager.Client
             // update aimpoint
             if (!(MyAPIGateway.Gui.IsCursorVisible || MyAPIGateway.Gui.ChatEntryVisible || MyAPIGateway.Session.IsCameraUserControlledSpectator))
             {
-                if (MyAPIGateway.Input.IsKeyPress(MyKeys.C))
+                if (MyAPIGateway.Input.IsKeyPress(ResetKey))
                 {
                     _aimDir = Vector3D.Zero;
                 }
-                else if (!MyAPIGateway.Input.IsKeyPress(MyKeys.Alt))
+                else if (!MyAPIGateway.Input.IsKeyPress(FreeLookKey))
                 {
                     _aimDir = GetLookDir(_aimDir);
                 }
@@ -163,7 +162,7 @@ namespace SetbTankManager.Client
                     return false;
             }
 
-            return MyAPIGateway.Input.IsKeyPress(MyKeys.RightButton);
+            return MyAPIGateway.Input.IsKeyPress(AimKey);
         }
 
         private Vector3D GetLookDir(Vector3D prev)
@@ -172,7 +171,7 @@ namespace SetbTankManager.Client
                 return MyAPIGateway.Session.Camera.WorldMatrix.Forward;
             MatrixD camMatrix = MyAPIGateway.Session.Camera.WorldMatrix.GetOrientation();
 
-            Vector2 rot = MyAPIGateway.Input.GetRotation() * ((MyAPIGateway.Session.Camera.FieldOfViewAngle / 90f) * AdjSensitivity / 60f);
+            Vector2 rot = MyAPIGateway.Input.GetRotation() * (MyAPIGateway.Session.Camera.FieldOfViewAngle / 90f * AdjSensitivity / 60f);
             MatrixD rotMat = MatrixD.CreateFromYawPitchRoll(-rot.Y, -rot.X, 0) * camMatrix;
             MatrixD invCamMatrix = MatrixD.Invert(camMatrix);
             return Vector3D.Rotate(Vector3D.Rotate(prev, invCamMatrix), rotMat);

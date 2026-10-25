@@ -23,10 +23,10 @@ namespace SetbTankManager.Client.AmmoDisplay
         /// </summary>
         public readonly Dictionary<string, string[]> WeaponMagMap = new Dictionary<string, string[]>();
 
-        public override void Init()
+        public override void Init(object[] args)
         {
             ApiManager.RichHudOnLoadRegisterOrInvoke(OnRichHudReady);
-            TurretManager.I.OnPlayerChangeGrid += (grid) => _window?.SetGrid(grid);
+            TurretManager.TurretManager.I.OnPlayerChangeGrid += (grid) => _window?.SetGrid(grid);
             WcApiManager.OnWcApiReady += () =>
             {
                 IDictionary<MyDefinitionId, List<MyTuple<int, MyTuple<MyDefinitionId, string, string, bool>>>> weaponMagMap = new Dictionary<MyDefinitionId, List<MyTuple<int, MyTuple<MyDefinitionId, string, string, bool>>>>();

@@ -1,7 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
-using SetbTankManager.Client;
+using SetbTankManager.Client.TurretManager;
 using VRage.Game.ModAPI;
 using VRageMath;
 

@@ -13,7 +13,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Mal.Mdk2.ModPackager" Version="2.2.11">
+    <PackageReference Include="Mal.Mdk2.ModPackager" Version="2.2.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -23,16 +23,16 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-	<AdditionalFiles Include="Content\*\**\*">
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	</AdditionalFiles>
+    <AdditionalFiles Include="Content\*\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AdditionalFiles>
     <AdditionalFiles Include="thumb.png" Condition="Exists('thumb.png')">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AdditionalFiles>
-	<AdditionalFiles Remove="Content\*\**\*.cs" />
-	<AdditionalFiles Remove="Content\Other content folders" />
-	<AdditionalFiles Remove="Content\Data\SBC files can go here" />
-	<None Remove="thumb.png" />
+    <AdditionalFiles Remove="Content\*\**\*.cs" />
+    <AdditionalFiles Remove="Content\Other content folders" />
+    <AdditionalFiles Remove="Content\Data\SBC files can go here" />
+    <None Remove="thumb.png" />
   </ItemGroup>
   <Import Project="..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\AriUtils\AriUtils.projitems" Label="Shared" />
   <Import Project="..\..\..\OneDrive\Documents\GitHub\SkytechEventRepo\Utility Mods\RichHudFramework\RichHudFramework.projitems" Label="Shared" />
