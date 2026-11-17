@@ -54,7 +54,7 @@ namespace SetbTankManager.Client.AmmoDisplay
                 }
                 Log.Info("AmmoDisplay", $"Finished polling WC magazines.");
 
-                WcApiManager.WcApi.WeaponDefinitions = null;
+                //WcApiManager.WcApi.WeaponDefinitions = null; // TODO BRING BACK!!!
             };
 
             Log.Info("AmmoDisplay", $"Start poll ammo magazine names...");

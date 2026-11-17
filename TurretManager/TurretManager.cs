@@ -32,9 +32,13 @@ namespace SetbTankManager.Client.TurretManager
                 if (_playerGrid == value)
                     return;
                 _playerGrid = value;
+                _playerSubgrids.Clear();
+                _playerGrid?.GetGridGroup(GridLinkTypeEnum.Logical).GetGrids(_playerSubgrids);
                 OnPlayerChangeGrid?.Invoke(_playerGrid);
             }
         }
+
+        private List<IMyCubeGrid> _playerSubgrids = new List<IMyCubeGrid>();
 
         private float Sensitivity = 0.25f;
         private const float CrosshairSize = 2f;
@@ -77,11 +81,14 @@ namespace SetbTankManager.Client.TurretManager
 
                 if (_hasGridControl)
                 {
-                    foreach (var pb in PlayerGrid.GetFatBlocks<IMyProgrammableBlock>())
+                    foreach (var subgrid in _playerSubgrids)
                     {
-                        if (!pb.CustomName.EndsWith("[SETBTankManager]"))
-                            continue;
-                        _gridPbs.Add(pb);
+                        foreach (var pb in subgrid.GetFatBlocks<IMyProgrammableBlock>())
+                        {
+                            if (!pb.CustomName.EndsWith("[SETBTankManager]"))
+                                continue;
+                            _gridPbs.Add(pb);
+                        }
                     }
                 }
             }
@@ -148,19 +155,19 @@ namespace SetbTankManager.Client.TurretManager
 
         private bool CanControlTurret(IMyShipController cockpit)
         {
-            if (!cockpit.IsMainCockpit)
-            {
-                return true;
-            }
+            //if (!cockpit.IsMainCockpit)
+            //{
+            //    return true;
+            //}
 
-            // multicrew support
-            foreach (var controller in cockpit.CubeGrid.GetFatBlocks<IMyShipController>())
-            {
-                if (controller == cockpit)
-                    continue;
-                if (controller.Pilot != null)
-                    return false;
-            }
+            // multicrew support TODO
+            //foreach (var controller in cockpit.CubeGrid.GetFatBlocks<IMyShipController>())
+            //{
+            //    if (controller == cockpit)
+            //        continue;
+            //    if (controller.Pilot != null)
+            //        return false;
+            //}
 
             return MyAPIGateway.Input.IsKeyPress(AimKey);
         }
