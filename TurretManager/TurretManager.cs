@@ -12,7 +12,6 @@ using VRageRender;
 
 namespace SetbTankManager.Client.TurretManager
 {
-    [MySessionComponentDescriptor(MyUpdateOrder.BeforeSimulation)]
     public class TurretManager : SingletonBase<TurretManager>
     {
         public const MyKeys AimKey = MyKeys.ExtraButton1;

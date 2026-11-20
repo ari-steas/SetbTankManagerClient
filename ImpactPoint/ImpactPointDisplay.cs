@@ -1,13 +1,12 @@
-﻿using System;
-using AriUtils;
+﻿using AriUtils;
 using CoreSystems.Api;
 using Sandbox.Game.Entities;
 using System.Collections.Generic;
 using Sandbox.ModAPI;
 using VRage;
-using VRage.Game;
 using VRage.Game.ModAPI;
 using VRage.Game.Models;
+using VRage.Utils;
 using VRageMath;
 using static CoreSystems.Api.WcApiManager;
 
@@ -15,13 +14,16 @@ namespace SetbTankManager.Client.ImpactPoint
 {
     internal class ImpactPointDisplay : SingletonBase<ImpactPointDisplay>
     {
-        private Dictionary<string, ProjectileInfo> _projectileData = new Dictionary<string, ProjectileInfo>();
+        private const string Font = "Monospaced";
+
+        private readonly Dictionary<string, ProjectileInfo> _projectileData = new Dictionary<string, ProjectileInfo>();
         private IMyCubeGrid _playerGrid = null;
         private bool _awaitSetGrid = false;
-        private List<MyCubeBlock> _weapons = new List<MyCubeBlock>();
-        private List<IMyCubeGrid> _grids = new List<IMyCubeGrid>();
+        private readonly List<MyCubeBlock> _weapons = new List<MyCubeBlock>();
+        private readonly List<IMyCubeGrid> _grids = new List<IMyCubeGrid>();
+        private MyPlanet _gridPlanet = null;
 
-        private List<MyTuple<Vector3D, Vector3D, Vector3D, Vector3D, MatrixD, MatrixD>> _muzzleInfoCache =
+        private readonly List<MyTuple<Vector3D, Vector3D, Vector3D, Vector3D, MatrixD, MatrixD>> _muzzleInfoCache =
             new List<MyTuple<Vector3D, Vector3D, Vector3D, Vector3D, MatrixD, MatrixD>>();
 
         public override void Init(object[] args)
@@ -74,15 +76,13 @@ namespace SetbTankManager.Client.ImpactPoint
             if (_playerGrid == null)
                 return;
 
-            MyPlanet gridPlanet = null;
-            foreach (var planet in GlobalData.Planets)
+            if (MyAPIGateway.Session.GameplayFrameCounter % 31 == 0)
             {
-                float gravLimit = planet.Components.Get<MyGravityProviderComponent>().GravityLimit;
-                if (gravLimit * gravLimit < Vector3D.DistanceSquared(planet.PositionComp.WorldMatrixRef.Translation, _playerGrid.PositionComp.WorldMatrixRef.Translation))
-                    continue;
-                gridPlanet = planet;
-                break;
+                _gridPlanet = MiscUtils.GetEntityPlanet(_playerGrid);
             }
+
+            if (_gridPlanet == null)
+                return;
 
             foreach (var weapon in _weapons)
             {
@@ -98,13 +98,52 @@ namespace SetbTankManager.Client.ImpactPoint
                     continue;
                 }
                 WcApi.GetMuzzleInfo(weapon, 0, _muzzleInfoCache);
-                CalcTrajectory(_muzzleInfoCache[0].Item1, _muzzleInfoCache[0].Item3, weapon.CubeGrid.Physics.GetVelocityAtPoint(_muzzleInfoCache[0].Item1), pInfo, gridPlanet, weapon.CubeGrid.GridSizeEnum == MyCubeSize.Small);
+                Vector3D impactPos;
+                double impactTime;
+                bool didImpact = CalcTrajectory(
+                    _muzzleInfoCache[0].Item1,
+                    _muzzleInfoCache[0].Item3,
+                    weapon.CubeGrid.Physics.GetVelocityAtPoint(_muzzleInfoCache[0].Item1),
+                    pInfo, _gridPlanet,
+                    out impactPos,
+                    out impactTime);
                 _muzzleInfoCache.Clear();
+
+                double dist = double.PositiveInfinity;
+                if (didImpact)
+                {
+                    dist = Vector3D.Distance(impactPos, MyAPIGateway.Session.Camera.Position);
+                }
+
+                string text = $"{dist:N0}m @ {impactTime:N1}s";
+                Vector2 textSize = MyScreenSpaceText.Measure("Monospace", text, 0.5f);
+                MyScreenSpaceText.Draw(
+                    "Monospace",
+                    text,
+                    new Vector2(textSize.X/2 + 0.5f + 2*MyScreenSpaceText.GetLineHeight("Monospace", 0.5f), 0.5f),
+                    0.5f, Color.White, MyGuiDrawAlignEnum.HORISONTAL_CENTER_AND_VERTICAL_CENTER);
             }
         }
 
-        private void CalcTrajectory(Vector3D muzzlePos, Vector3D muzzleDir, Vector3D gridVelocity, ProjectileInfo pInfo, MyPlanet planet, bool isSmallGrid)
+        public override void Draw()
         {
+            // camera gravity stabilizer
+            if (_gridPlanet == null || _playerGrid == null)
+                return;
+            MyCameraBlock cam = MyAPIGateway.Session.CameraController.Entity as MyCameraBlock;
+            if (cam == null)
+                return;
+
+            Vector3 gravVec = -Vector3.Transform(_gridPlanet.PositionComp.WorldMatrixRef.Translation - cam.PositionComp.WorldMatrixRef.Translation, MatrixD.Invert(cam.CubeGrid.PositionComp.GetOrientation()));
+            Matrix m = Matrix.CreateWorld(cam.PositionComp.LocalMatrixRef.Translation, cam.PositionComp.LocalMatrixRef.Forward, gravVec.Normalized());
+            cam.PositionComp.SetLocalMatrix(ref m);
+        }
+
+        private bool CalcTrajectory(Vector3D muzzlePos, Vector3D muzzleDir, Vector3D gridVelocity, ProjectileInfo pInfo, MyPlanet planet, out Vector3D impactPos, out double impactTime)
+        {
+            impactPos = Vector3D.Zero;
+            impactTime = double.PositiveInfinity;
+
             Vector3D planetPos = planet.WorldMatrix.Translation;
             float gravityConst = pInfo.Trajectory.GravityMultiplier * 9.81f * planet.GetInitArguments.SurfaceGravity / 60;
 
@@ -122,11 +161,14 @@ namespace SetbTankManager.Client.ImpactPoint
                 vel += gravityConst * Vector3D.Normalize(planetPos - pos); // applying acceleration second seems to be more accurate
                 if (time % 4 == 0)
                 {
+                    #if DEBUG
                     DebugDraw.AddLine(pos, newPos, new Color(2000f, 0f, 0f, 2000f), 0);
+                    #endif
                     LineD interLine = new LineD(lastCastPos, newPos);
                     MyIntersectionResultLineTriangleEx? tri;
                     if (planet.GetIntersectionWithLine(ref interLine, out tri)) // voxel layer
                     {
+                        #if DEBUG
                         DebugDraw.AddGps("Impact Point", tri.Value.IntersectionPointInWorldSpace, 1/60f);
 
                         MatrixD impactMatrix = MatrixD.CreateWorld(tri.Value.IntersectionPointInWorldSpace, Vector3.CalculatePerpendicularVector(tri.Value.NormalInWorldSpace), tri.Value.NormalInWorldSpace);
@@ -137,7 +179,13 @@ namespace SetbTankManager.Client.ImpactPoint
                         maxDeviation = (float) Math.Tan(MathHelper.ToRadians(maxDeviation)) * dist;
                         MyAPIGateway.Utilities.ShowNotification($"{pInfo.HardPoint.DeviateShotAngle * (isSmallGrid ? pInfo.HardPoint.DeviateShotAngleSGModifier : 1):N}deg -> {maxDeviation:N}m deviation @ {dist:N}m travelled", 1000/60);
                         MySimpleObjectDraw.DrawTransparentCylinder(ref impactMatrix, maxDeviation, maxDeviation/2, 0, ref color, true, 360 / 15, 1f);
-                        break;
+                        #endif
+
+                        if (tri == null)
+                            continue;
+                        impactPos = tri.Value.IntersectionPointInWorldSpace;
+                        impactTime = time/60d;
+                        return true;
                     }
                     lastCastPos = newPos;
                 }
@@ -145,6 +193,8 @@ namespace SetbTankManager.Client.ImpactPoint
        
                 time++;
             }
+
+            return false;
         }
 
 
