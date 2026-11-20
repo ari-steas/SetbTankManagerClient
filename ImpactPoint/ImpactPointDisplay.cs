@@ -81,7 +81,7 @@ namespace SetbTankManager.Client.ImpactPoint
                 _gridPlanet = MiscUtils.GetEntityPlanet(_playerGrid);
             }
 
-            if (_gridPlanet == null)
+            if (_gridPlanet == null || !(MyAPIGateway.Session.CameraController.Entity is MyCameraBlock))
                 return;
 
             foreach (var weapon in _weapons)
